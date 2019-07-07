@@ -14,12 +14,21 @@
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+        .row {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .card-header .nav-item {
+            margin-right: 0.2em;
+        }
+    </style>
 </head>
 
-<body>
-    <header class="main-header">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Roger</a>
+<body onload="refresh()">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+            <a class="navbar-brand" href="/">Roger</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -27,14 +36,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
                 </ul>
             </div>
         </nav>
-    </header>
-    <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
@@ -46,7 +50,11 @@
                         </ul>
                         <ul class="nav nav-pills card-header-pills pull-right">
                             <li class="nav-item">
-                                <a class="nav-link btn-primary" href="#" id="refresh" onclick="refresh()"><i class="fas fa-sync"></i> Refresh</a>
+                                <a class="nav-link btn-primary" href="#" id="save" onclick="save()"><i class="far fa-save"></i> Save</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn-primary" href="#" id="refresh" onclick="refresh()"><i
+                                        class="fas fa-sync"></i> Refresh</a>
                             </li>
                         </ul>
                     </div>
@@ -58,16 +66,11 @@
                                     <th>ID</th>
                                     <th>File</th>
                                     <th>Matches</th>
-                                    <th>Is Sync</th>
+                                    <th>Sync</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1234565</td>
-                                    <td>file.mp3</td>
-                                    <td>file</td>
-                                    <td>false</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -81,28 +84,24 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                            <ul class="nav nav-pills card-header-pills">
-                                <li class="nav-item">
-                                    <a class="nav-link">Upload a new file</a>
-                                </li>
-                            </ul>
+                        <ul class="nav nav-pills card-header-pills">
+                            <li class="nav-item">
+                                <a class="nav-link">Upload a new file</a>
+                            </li>
+                        </ul>
                     </div>
                     <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputFile">File input</label>
-                                <input type="file" id="exampleInputFile">
-
-                                <p class="help-block">1KB max</p>
-                            </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="uploadFile">File input</label>
+                            <input type="file" id="uploadFile">
+                            <p class="help-block">1KB max</p>
                         </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button class="btn btn-primary" onclick="upload()" id="upload">Submit</button>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -127,6 +126,7 @@
     <!-- Font Awesome-->
     <script type="text/javascript" src="https://kit.fontawesome.com/3ba5f305f8.js"></script>
     <!-- Roger -->
+    <script type="text/javascript" src="request.js"></script>
     <script type="text/javascript" src="index.js"></script>
 
 </body>
