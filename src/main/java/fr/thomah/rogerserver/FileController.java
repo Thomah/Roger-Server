@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/api")
 public class FileController {
 
     private static final File FILES_DIR = new File("./files");
@@ -52,8 +53,8 @@ public class FileController {
 
     @RequestMapping(value = "/files", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<FileData> getFileList(@RequestParam("isSync") boolean isSync) {
-        return fileDataRepository.findByIsSync(isSync);
+    public List<FileData> getFileList() {
+        return fileDataRepository.findAll();
     }
 
     @RequestMapping(value = "/files/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
