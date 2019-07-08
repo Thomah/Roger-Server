@@ -13,6 +13,10 @@ function overload_xhr(method,
         textButton.classList.remove('btn-primary');
         textButton.classList.remove('btn-danger');
         textButton.classList.add('btn-success');
+        setTimeout(function() {
+          textButton.classList.remove('btn-success');
+          textButton.classList.add('btn-primary');
+        }, 4000);
       }
       success_function(this);
     } else {
@@ -20,6 +24,10 @@ function overload_xhr(method,
         textButton.classList.remove('btn-primary');
         textButton.classList.remove('btn-success');
         textButton.classList.add('btn-danger');
+        setTimeout(function() {
+          textButton.classList.remove('btn-danger');
+          textButton.classList.add('btn-primary');
+        }, 4000);
       }
       error_function();
     }

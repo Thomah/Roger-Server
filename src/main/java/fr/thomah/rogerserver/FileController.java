@@ -57,6 +57,13 @@ public class FileController {
         return fileDataRepository.findAll();
     }
 
+    @RequestMapping(value = "/files", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String update(@RequestBody List<FileData> files) {
+        fileDataRepository.saveAll(files);
+        return null;
+    }
+
     @RequestMapping(value = "/files/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public FileData upload(@RequestParam("file") MultipartFile file) {
