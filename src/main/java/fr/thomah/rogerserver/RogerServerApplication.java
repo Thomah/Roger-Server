@@ -1,6 +1,7 @@
 package fr.thomah.rogerserver;
 
 import com.github.seratch.jslack.*;
+import com.github.seratch.jslack.api.model.User;
 import com.github.seratch.jslack.api.rtm.*;
 import com.github.seratch.jslack.api.rtm.message.Message;
 import com.github.seratch.jslack.api.rtm.message.Typing;
@@ -29,6 +30,8 @@ public class RogerServerApplication {
 		RTMClient rtm;
 		try {
 			rtm = new Slack().rtm(token);
+			User botUser = rtm.getConnectedBotUser();
+			System.out.println("BOT ID : " + botUser.getId());
 			rtm.addMessageHandler((message) -> {
 				JsonObject json = jsonParser.parse(message).getAsJsonObject();
 				System.out.println(json.toString());
