@@ -2,15 +2,10 @@ package fr.thomah.rogerserver;
 
 import com.github.seratch.jslack.*;
 import com.github.seratch.jslack.api.methods.SlackApiException;
-import com.github.seratch.jslack.api.methods.response.channels.ChannelsListResponse;
 import com.github.seratch.jslack.api.model.User;
 import com.github.seratch.jslack.api.rtm.*;
-import com.github.seratch.jslack.api.rtm.message.Message;
-import com.github.seratch.jslack.api.rtm.message.Typing;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.thomah.rogerserver.controllers.SlackController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -19,10 +19,11 @@
             margin-top: 1em;
             margin-bottom: 1em;
         }
+
         .card-header .nav-item {
-                                margin-right: 0.2em;
-                                }
-                            </style>
+            margin-right: 0.2em;
+        }
+    </style>
 </head>
 
 <body onload="refresh()">
@@ -36,6 +37,12 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Files<span class="sr-only">(page courante)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/slack.html">Slack</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -50,7 +57,8 @@
                         </ul>
                         <ul class="nav nav-pills card-header-pills pull-right">
                             <li class="nav-item">
-                                <a class="nav-link btn-primary" href="#" id="save" onclick="save()"><i class="far fa-save"></i> Save</a>
+                                <a class="nav-link btn-primary" href="#" id="save" onclick="save()"><i
+                                        class="far fa-save"></i> Save</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link btn-primary" href="#" id="refresh" onclick="refresh()"><i
