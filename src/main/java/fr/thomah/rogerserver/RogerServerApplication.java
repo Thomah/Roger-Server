@@ -1,6 +1,8 @@
 package fr.thomah.rogerserver;
 
 import com.github.seratch.jslack.*;
+import com.github.seratch.jslack.api.methods.SlackApiException;
+import com.github.seratch.jslack.api.methods.response.channels.ChannelsListResponse;
 import com.github.seratch.jslack.api.model.User;
 import com.github.seratch.jslack.api.rtm.*;
 import com.github.seratch.jslack.api.rtm.message.Message;
@@ -18,34 +20,29 @@ import java.io.IOException;
 @SpringBootApplication
 public class RogerServerApplication {
 
-	@Autowired
-	private SlackController slackController;
+	private static final String SLACK_BOT_TOKEN = System.getenv("SLACK_BOT_TOKEN");
+	private static final String SLACK_TOKEN = System.getenv("SLACK_TOKEN");
+	private static final String SLACK_CHANNEL = System.getenv("SLACK_CHANNEL");
 
 	public static void main(String[] args) {
 
 		JsonParser jsonParser = new JsonParser();
-		String token = System.getenv("SLACK_TOKEN");
-		System.out.println(token);
-
+		Slack slack = Slack.getInstance();
 		RTMClient rtm;
 		try {
-			rtm = new Slack().rtm(token);
+			rtm = new Slack().rtm(SLACK_BOT_TOKEN);
 			User botUser = rtm.getConnectedBotUser();
-			System.out.println("BOT ID : " + botUser.getId());
+			slack.methods().channelsInvite(req -> req
+					.token(SLACK_TOKEN)
+					.channel(SLACK_CHANNEL)
+					.user(botUser.getId())
+			);
 			rtm.addMessageHandler((message) -> {
 				JsonObject json = jsonParser.parse(message).getAsJsonObject();
 				System.out.println(json.toString());
-				if (json.get("type") != null) {
-					System.out.println("Handled type: " + json.get("type").getAsString());
-				}
 			});
 			rtm.connect();
-			rtm.sendMessage(Message.builder()
-					.id(System.currentTimeMillis())
-					.channel("DK0US0F2N")
-					.text("Hi!")
-					.build().toJSONString());
-		} catch (IOException | DeploymentException e) {
+		} catch (IOException | DeploymentException | SlackApiException e) {
 			e.printStackTrace();
 		}
 		SpringApplication.run(RogerServerApplication.class, args);
