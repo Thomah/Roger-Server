@@ -26,8 +26,9 @@ public class RogerServerApplication {
 		String token = System.getenv("SLACK_TOKEN");
 		System.out.println(token);
 
-		try (RTMClient rtm = new Slack().rtm(token)) {
-
+		RTMClient rtm;
+		try {
+			rtm = new Slack().rtm(token);
 			rtm.addMessageHandler((message) -> {
 				JsonObject json = jsonParser.parse(message).getAsJsonObject();
 				System.out.println(json.toString());
@@ -35,31 +36,13 @@ public class RogerServerApplication {
 					System.out.println("Handled type: " + json.get("type").getAsString());
 				}
 			});
-
-			RTMMessageHandler handler2 = (message) -> {
-				System.out.println("Hello " + message);
-			};
-
-			rtm.addMessageHandler(handler2);
-
-			// must connect within 30 seconds after issuing wss endpoint
 			rtm.connect();
-
-			rtm.sendMessage(Typing.builder()
-					.id(System.currentTimeMillis())
-					.channel("DK0US0F2N")
-					.build().toJSONString());
-
 			rtm.sendMessage(Message.builder()
 					.id(System.currentTimeMillis())
 					.channel("DK0US0F2N")
 					.text("Hi!")
 					.build().toJSONString());
-
-			rtm.removeMessageHandler(handler2);
-
-		} // #close method does #disconnect
-		catch (IOException | DeploymentException e) {
+		} catch (IOException | DeploymentException e) {
 			e.printStackTrace();
 		}
 		SpringApplication.run(RogerServerApplication.class, args);
