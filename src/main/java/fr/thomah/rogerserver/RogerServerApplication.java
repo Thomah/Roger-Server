@@ -30,6 +30,7 @@ public class RogerServerApplication {
 
 			rtm.addMessageHandler((message) -> {
 				JsonObject json = jsonParser.parse(message).getAsJsonObject();
+				System.out.println(json.getAsString());
 				if (json.get("type") != null) {
 					System.out.println("Handled type: " + json.get("type").getAsString());
 				}
