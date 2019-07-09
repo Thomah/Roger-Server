@@ -1,4 +1,4 @@
-package fr.thomah.rogerserver;
+package fr.thomah.rogerserver.controllers;
 
 import fr.thomah.rogerserver.entities.FileData;
 import fr.thomah.rogerserver.exceptions.ForbiddenException;
