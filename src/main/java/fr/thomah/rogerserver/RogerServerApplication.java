@@ -4,8 +4,8 @@ import com.github.seratch.jslack.*;
 import com.github.seratch.jslack.api.rtm.*;
 import com.github.seratch.jslack.api.rtm.message.Message;
 import com.github.seratch.jslack.api.rtm.message.Typing;
-import com.google.gson.*;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.thomah.rogerserver.controllers.SlackController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +30,7 @@ public class RogerServerApplication {
 
 			rtm.addMessageHandler((message) -> {
 				JsonObject json = jsonParser.parse(message).getAsJsonObject();
-				System.out.println(json.getAsString());
+				System.out.println(json.toString());
 				if (json.get("type") != null) {
 					System.out.println("Handled type: " + json.get("type").getAsString());
 				}
