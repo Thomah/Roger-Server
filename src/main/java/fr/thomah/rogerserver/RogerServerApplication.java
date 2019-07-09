@@ -24,6 +24,7 @@ public class RogerServerApplication {
 
 		JsonParser jsonParser = new JsonParser();
 		String token = System.getenv("SLACK_TOKEN");
+		System.out.println(token);
 
 		try (RTMClient rtm = new Slack().rtm(token)) {
 
