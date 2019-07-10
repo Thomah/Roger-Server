@@ -4,11 +4,12 @@ import com.github.seratch.jslack.*;
 import com.github.seratch.jslack.api.methods.SlackApiException;
 import com.github.seratch.jslack.api.model.User;
 import com.github.seratch.jslack.api.rtm.*;
-import com.google.gson.JsonParser;
-import fr.thomah.rogerserver.controllers.SlackController;
+import fr.thomah.rogerserver.controllers.SlackMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 import javax.websocket.DeploymentException;
 import java.io.IOException;
@@ -21,10 +22,14 @@ public class RogerServerApplication {
 	private static final String SLACK_CHANNEL = System.getenv("SLACK_CHANNEL");
 
 	@Autowired
-	private static SlackController slackController;
+	private SlackMessageHandler slackMessageHandler;
 
 	public static void main(String[] args) {
-		JsonParser jsonParser = new JsonParser();
+		SpringApplication.run(RogerServerApplication.class, args);
+	}
+
+	@EventListener(ApplicationReadyEvent.class)
+	public void doSomethingAfterStartup() {
 		Slack slack = Slack.getInstance();
 		RTMClient rtm;
 		try {
@@ -35,15 +40,11 @@ public class RogerServerApplication {
 					.channel(SLACK_CHANNEL)
 					.user(botUser.getId())
 			);
-			rtm.addMessageHandler((message) -> {
-				System.out.println(message);
-				slackController.processRtm(jsonParser.parse(message).getAsJsonObject());
-			});
+			rtm.addMessageHandler(slackMessageHandler);
 			rtm.connect();
 		} catch (IOException | DeploymentException | SlackApiException e) {
 			e.printStackTrace();
 		}
-		SpringApplication.run(RogerServerApplication.class, args);
 	}
 
 }
