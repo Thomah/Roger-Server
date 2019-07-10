@@ -1,8 +1,8 @@
+var stompClient = null;
+
 function refresh() {
     connect();
 }
-
-var stompClient = null;
 
 function connect() {
     var socket = new SockJS('/socket');
@@ -21,7 +21,3 @@ function disconnect() {
     }
     console.log("Disconnected");
 }
-
-$(function () {
-    connect();
-});

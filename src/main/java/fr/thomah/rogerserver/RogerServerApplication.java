@@ -36,6 +36,7 @@ public class RogerServerApplication {
 					.user(botUser.getId())
 			);
 			rtm.addMessageHandler((message) -> {
+				System.out.println(message);
 				slackController.processRtm(jsonParser.parse(message).getAsJsonObject());
 			});
 			rtm.connect();
