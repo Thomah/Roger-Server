@@ -20,6 +20,7 @@ public class RogerServerApplication {
 	private static final String SLACK_BOT_TOKEN = System.getenv("SLACK_BOT_TOKEN");
 	private static final String SLACK_TOKEN = System.getenv("SLACK_TOKEN");
 	private static final String SLACK_CHANNEL = System.getenv("SLACK_CHANNEL");
+    private static final String SLACK_GRAFANA_BOT_ID = System.getenv("SLACK_GRAFANA_BOT_ID");
 
 	@Autowired
 	private SlackMessageHandler slackMessageHandler;
@@ -40,6 +41,7 @@ public class RogerServerApplication {
 					.channel(SLACK_CHANNEL)
 					.user(botUser.getId())
 			);
+			slackMessageHandler.setGrafanaBotId(SLACK_GRAFANA_BOT_ID);
 			rtm.addMessageHandler(slackMessageHandler);
 			rtm.connect();
 		} catch (IOException | DeploymentException | SlackApiException e) {

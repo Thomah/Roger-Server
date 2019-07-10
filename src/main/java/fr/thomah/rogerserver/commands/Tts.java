@@ -2,6 +2,8 @@ package fr.thomah.rogerserver.commands;
 
 public class Tts {
 
+    public final String TYPE = "tts";
+
     public String text;
 
     public String voice;
