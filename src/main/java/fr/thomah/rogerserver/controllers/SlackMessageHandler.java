@@ -49,7 +49,9 @@ public class SlackMessageHandler implements RTMMessageHandler {
             }
         }
 
-        this.template.convertAndSend("/command", objectToSend);
+        if(objectToSend != null) {
+            this.template.convertAndSend("/command", objectToSend);
+        }
     }
 
     public void setGrafanaBotId(String slackGrafanaBotId) {
