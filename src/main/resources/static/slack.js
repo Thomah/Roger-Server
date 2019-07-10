@@ -9,7 +9,7 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/slack', function (slackConfig) {
+        stompClient.subscribe('/command/tts', function (slackConfig) {
             console.log(slackConfig)
         });
     });
