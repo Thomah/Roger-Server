@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.thomah.rogerserver.commands.Tts;
+import fr.thomah.rogerserver.commands.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -26,16 +26,20 @@ public class SlackMessageHandler implements RTMMessageHandler {
 
         // If Grafana is alerting
         JsonElement botId = jsonObject.get("bot_id");
-        if(botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
+        if (botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
             JsonElement attachmentsElement = jsonObject.get("attachments");
-            if(attachmentsElement != null) {
+            if (attachmentsElement != null) {
                 JsonArray attachmentsArray = attachmentsElement.getAsJsonArray();
                 JsonElement titleElement = attachmentsArray.get(0).getAsJsonObject().get("title");
-                if(titleElement != null && !titleElement.getAsString().equals("")) {
+                if (titleElement != null && !titleElement.getAsString().equals("")) {
                     String title = titleElement.getAsString();
                     title = title.replace("[Alerting] ", "");
                     title = "Un nouveau " + title + " a été détecté.";
-                    objectToSend = new Tts(title, "1", "0", "0");
+                    objectToSend = new Command("/tts")
+                            .addParam("text", title)
+                            .addParam("voice", "1")
+                            .addParam("nocache", "0")
+                            .addParam("mute", "0");
                 }
             }
         }
@@ -45,11 +49,15 @@ public class SlackMessageHandler implements RTMMessageHandler {
         if (textElement != null && !textElement.getAsString().equals("")) {
             String text = textElement.getAsString();
             if (text.startsWith("dire:")) {
-                objectToSend = new Tts(text.replace("dire:", ""), "1", "0", "0");
+                objectToSend = new Command("/tts")
+                        .addParam("text", text.replace("dire:", ""))
+                        .addParam("voice", "1")
+                        .addParam("nocache", "0")
+                        .addParam("mute", "0");
             }
         }
 
-        if(objectToSend != null) {
+        if (objectToSend != null) {
             this.template.convertAndSend("/command", objectToSend);
         }
     }
