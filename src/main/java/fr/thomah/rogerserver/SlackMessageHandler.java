@@ -1,11 +1,11 @@
-package fr.thomah.rogerserver.controllers;
+package fr.thomah.rogerserver;
 
 import com.github.seratch.jslack.api.rtm.RTMMessageHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.thomah.rogerserver.commands.Command;
+import fr.thomah.rogerserver.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
