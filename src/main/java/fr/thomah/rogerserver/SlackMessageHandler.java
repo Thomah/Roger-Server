@@ -6,15 +6,26 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.thomah.rogerserver.Command;
+import fr.thomah.rogerserver.entities.FileData;
+import fr.thomah.rogerserver.repositories.FileDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class SlackMessageHandler implements RTMMessageHandler {
 
     @Autowired
+    private FileDataRepository fileDataRepository;
+
+    @Autowired
     private SimpMessagingTemplate template;
+
+    private List<FileData> fileDataList;
 
     private String slackGrafanaBotId = System.getenv("SLACK_GRAFANA_BOT_ID");
 
@@ -54,12 +65,25 @@ public class SlackMessageHandler implements RTMMessageHandler {
                         .addParam("voice", "1")
                         .addParam("nocache", "0")
                         .addParam("mute", "0");
+            } else {
+                FileData matchingFileData = fileDataList.stream()
+                        .filter(fileData -> text.contains(fileData.matches))
+                        .findAny().orElse(null);
+                if (matchingFileData != null) {
+                    objectToSend = new Command("/sound")
+                            .addParam("url", "<THIS_COMPUTER_URL>/public/music/" + matchingFileData.fileName.replaceAll(" ", "%20"));
+                }
             }
         }
 
         if (objectToSend != null) {
             this.template.convertAndSend("/command", objectToSend);
         }
+    }
+
+    @PostConstruct
+    public void init() {
+        fileDataList = fileDataRepository.findAll();
     }
 
 }
