@@ -16,7 +16,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private String slackGrafanaBotId;
+    private String slackGrafanaBotId = System.getenv("SLACK_GRAFANA_BOT_ID");
 
     @Override
     public void handle(String message) {
@@ -62,7 +62,4 @@ public class SlackMessageHandler implements RTMMessageHandler {
         }
     }
 
-    public void setGrafanaBotId(String slackGrafanaBotId) {
-        this.slackGrafanaBotId = slackGrafanaBotId;
-    }
 }
