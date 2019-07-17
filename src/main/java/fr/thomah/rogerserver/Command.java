@@ -1,4 +1,4 @@
-package fr.thomah.rogerserver.commands;
+package fr.thomah.rogerserver;
 
 import java.util.HashMap;
 import java.util.Map;

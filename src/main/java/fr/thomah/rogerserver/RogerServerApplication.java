@@ -4,7 +4,6 @@ import com.github.seratch.jslack.*;
 import com.github.seratch.jslack.api.methods.SlackApiException;
 import com.github.seratch.jslack.api.model.User;
 import com.github.seratch.jslack.api.rtm.*;
-import fr.thomah.rogerserver.controllers.SlackMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
