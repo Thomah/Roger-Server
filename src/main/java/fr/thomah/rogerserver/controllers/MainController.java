@@ -3,6 +3,7 @@ package fr.thomah.rogerserver.controllers;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.rtm.RTMClient;
 import fr.thomah.rogerserver.RogerServerApplication;
+import fr.thomah.rogerserver.SlackMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
