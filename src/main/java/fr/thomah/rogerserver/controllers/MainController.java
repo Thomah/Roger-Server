@@ -21,12 +21,16 @@ public class MainController {
     @Autowired
     private SlackMessageHandler slackMessageHandler;
 
+    private RTMClient rtm = null;
+
     @RequestMapping(value = "/health", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Object health() {
         Slack slack = Slack.getInstance();
-        RTMClient rtm;
         try {
+            if(rtm != null) {
+                rtm.disconnect();
+            }
             rtm = slack.rtm(RogerServerApplication.SLACK_BOT_TOKEN);
             rtm.addMessageHandler(slackMessageHandler);
             rtm.connect();
