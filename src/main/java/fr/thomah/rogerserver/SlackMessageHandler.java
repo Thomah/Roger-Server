@@ -71,7 +71,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
                         .findAny().orElse(null);
                 if (matchingFileData != null) {
                     objectToSend = new Command("/sound")
-                            .addParam("url", "<THIS_COMPUTER_URL>/public/music/" + matchingFileData.fileName.replaceAll(" ", "%20"));
+                            .addParam("url", "<CLIENT_URL>/public/music/" + matchingFileData.fileName.replaceAll(" ", "%20"));
                 }
             }
         }

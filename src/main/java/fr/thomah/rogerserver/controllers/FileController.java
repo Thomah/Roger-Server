@@ -106,10 +106,10 @@ public class FileController {
         Optional<FileData> fileDataOpt = fileDataRepository.findById(id);
         if (fileDataOpt.isPresent()) {
             FileData fileData = fileDataOpt.get();
+            fileDataRepository.delete(fileData);
             File f = Paths.get(FILES_DIR.getPath(), fileData.fileName).toFile();
             if (f.exists()) {
                 if (f.delete()) {
-                    fileDataRepository.delete(fileData);
                     return null;
                 } else {
                     throw new InternalServerException();
