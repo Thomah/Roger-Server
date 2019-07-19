@@ -73,6 +73,10 @@ public class SlackMessageHandler implements RTMMessageHandler {
         }
     }
 
+    public void setFileDataList(List<FileData> fileDataList) {
+        this.fileDataList = fileDataList;
+    }
+
     @PostConstruct
     public void init() {
         fileDataList = fileDataRepository.findAll();

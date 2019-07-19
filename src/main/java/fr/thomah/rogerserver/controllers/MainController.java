@@ -80,6 +80,7 @@ public class MainController {
     private void refreshFileDataList() {
         fileDataList = fileDataRepository.findByIsSync(true);
         nbFiles = fileDataList.size();
+        slackMessageHandler.setFileDataList(fileDataList);
     }
 
     private int generateRandomBetween(int min, int max) {
