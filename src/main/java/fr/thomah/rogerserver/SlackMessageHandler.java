@@ -5,25 +5,26 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.thomah.rogerserver.Command;
+import fr.thomah.rogerserver.controllers.CommandController;
+import fr.thomah.rogerserver.entities.Command;
 import fr.thomah.rogerserver.entities.FileData;
+import fr.thomah.rogerserver.entities.LocalSoundCommand;
+import fr.thomah.rogerserver.entities.TtsCommand;
 import fr.thomah.rogerserver.repositories.FileDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class SlackMessageHandler implements RTMMessageHandler {
 
     @Autowired
-    private FileDataRepository fileDataRepository;
+    private CommandController commandController;
 
     @Autowired
-    private SimpMessagingTemplate template;
+    private FileDataRepository fileDataRepository;
 
     private List<FileData> fileDataList;
 
@@ -33,7 +34,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
     public void handle(String message) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(message).getAsJsonObject();
-        Object objectToSend = null;
+        Command objectToSend = null;
 
         // If Grafana is alerting
         JsonElement botId = jsonObject.get("bot_id");
@@ -46,11 +47,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
                     String title = titleElement.getAsString();
                     title = title.replace("[Alerting] ", "");
                     title = "Un nouveau " + title + " a été détecté.";
-                    objectToSend = new Command("/tts")
-                            .addParam("text", title)
-                            .addParam("voice", "1")
-                            .addParam("nocache", "0")
-                            .addParam("mute", "0");
+                    objectToSend = new TtsCommand(title);
                 }
             }
         }
@@ -60,24 +57,19 @@ public class SlackMessageHandler implements RTMMessageHandler {
         if (textElement != null && !textElement.getAsString().equals("")) {
             String text = textElement.getAsString();
             if (text.startsWith("dire:")) {
-                objectToSend = new Command("/tts")
-                        .addParam("text", text.replace("dire:", ""))
-                        .addParam("voice", "1")
-                        .addParam("nocache", "0")
-                        .addParam("mute", "0");
+                objectToSend = new TtsCommand(text.replace("dire:", ""));
             } else {
                 FileData matchingFileData = fileDataList.stream()
                         .filter(fileData -> text.contains(fileData.matches))
                         .findAny().orElse(null);
                 if (matchingFileData != null) {
-                    objectToSend = new Command("/sound")
-                            .addParam("url", "<CLIENT_URL>/public/music/" + matchingFileData.fileName.replaceAll(" ", "%20"));
+                    objectToSend = new LocalSoundCommand(matchingFileData.fileName);
                 }
             }
         }
 
         if (objectToSend != null) {
-            this.template.convertAndSend("/command", objectToSend);
+            commandController.broadcast(objectToSend);
         }
     }
 

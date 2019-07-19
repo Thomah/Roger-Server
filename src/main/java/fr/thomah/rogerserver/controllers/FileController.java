@@ -81,13 +81,15 @@ public class FileController {
 
     @RequestMapping(value = "/files/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public FileSystemResource get(@PathVariable("id") String id, @RequestParam("token") String token) {
+    public FileSystemResource sync(@PathVariable("id") String id, @RequestParam("token") String token) {
         if (TOKEN.equals(token)) {
             Optional<FileData> fileDataOpt = fileDataRepository.findById(id);
             if (fileDataOpt.isPresent()) {
                 FileData fileData = fileDataOpt.get();
                 Path p = Paths.get(FILES_DIR.getPath(), fileData.fileName);
                 if (p.toFile().exists()) {
+                    fileData.isSync = true;
+                    fileDataRepository.save(fileData);
                     return new FileSystemResource(Paths.get(FILES_DIR.getPath(), fileData.fileName));
                 } else {
                     throw new NotFoundException();

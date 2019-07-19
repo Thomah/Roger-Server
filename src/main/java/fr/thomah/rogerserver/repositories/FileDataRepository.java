@@ -9,6 +9,4 @@ public interface FileDataRepository extends MongoRepository<FileData, String> {
 
     List<FileData> findByIsSync(boolean isSync);
 
-
-
 }
