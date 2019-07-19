@@ -30,6 +30,8 @@ public class SlackMessageHandler implements RTMMessageHandler {
 
     private String slackGrafanaBotId = System.getenv("SLACK_GRAFANA_BOT_ID");
 
+    private short nbAlerts = 0;
+
     @Override
     public void handle(String message) {
         JsonParser jsonParser = new JsonParser();
@@ -46,8 +48,13 @@ public class SlackMessageHandler implements RTMMessageHandler {
                     JsonElement titleElement = attachmentsArray.get(0).getAsJsonObject().get("title");
                     if (titleElement != null && !titleElement.getAsString().equals("")) {
                         String title = titleElement.getAsString();
-                        title = title.replace("[Alerting] ", "");
-                        title = "Un nouveau " + title + " a été détecté.";
+                        if(title.startsWith("[Alerting]")) {
+                            title = title.replace("[Alerting] ", "");
+                            title = "Vous avez des nouveaux " + title + ". Au boulot !";
+                        } else if(title.startsWith("[No Data]")) {
+                            title = title.replace("[No Data] ", "");
+                            title = "Bien joué. Plus de " + title + " a lhorizon";
+                        }
                         objectToSend = new TtsCommand(title);
                     }
                 }
