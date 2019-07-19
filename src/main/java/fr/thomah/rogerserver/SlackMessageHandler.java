@@ -37,17 +37,19 @@ public class SlackMessageHandler implements RTMMessageHandler {
         Command objectToSend = null;
 
         // If Grafana is alerting
-        JsonElement botId = jsonObject.get("bot_id");
-        if (botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
-            JsonElement attachmentsElement = jsonObject.get("attachments");
-            if (attachmentsElement != null) {
-                JsonArray attachmentsArray = attachmentsElement.getAsJsonArray();
-                JsonElement titleElement = attachmentsArray.get(0).getAsJsonObject().get("title");
-                if (titleElement != null && !titleElement.getAsString().equals("")) {
-                    String title = titleElement.getAsString();
-                    title = title.replace("[Alerting] ", "");
-                    title = "Un nouveau " + title + " a été détecté.";
-                    objectToSend = new TtsCommand(title);
+        if(slackGrafanaBotId != null) {
+            JsonElement botId = jsonObject.get("bot_id");
+            if (botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
+                JsonElement attachmentsElement = jsonObject.get("attachments");
+                if (attachmentsElement != null) {
+                    JsonArray attachmentsArray = attachmentsElement.getAsJsonArray();
+                    JsonElement titleElement = attachmentsArray.get(0).getAsJsonObject().get("title");
+                    if (titleElement != null && !titleElement.getAsString().equals("")) {
+                        String title = titleElement.getAsString();
+                        title = title.replace("[Alerting] ", "");
+                        title = "Un nouveau " + title + " a été détecté.";
+                        objectToSend = new TtsCommand(title);
+                    }
                 }
             }
         }
