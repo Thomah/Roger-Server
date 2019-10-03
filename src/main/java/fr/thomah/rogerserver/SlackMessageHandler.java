@@ -51,7 +51,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
                             title = "Vous avez des nouveaux " + title + ". Au boulot !";
                         } else if (title.startsWith("[No Data]")) {
                             title = title.replace("[No Data] ", "");
-                            title = "Bien jouer. Plus de " + title + " a lhorizon";
+                            title = "Bien jouer. Aucun " + title + " a lhorizon";
                         }
                         objectsToSend.add(new EarsCommand("10", "10", "1"));
                         objectsToSend.add(new TtsCommand(title));

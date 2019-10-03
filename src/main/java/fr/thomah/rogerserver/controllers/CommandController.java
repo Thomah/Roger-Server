@@ -16,6 +16,7 @@ public class CommandController {
     private SimpMessagingTemplate template;
 
     public void broadcast(Command command) {
+        System.out.println("Sending command : " + command);
         commandRepository.save(command);
         this.template.convertAndSend("/command", command);
     }
