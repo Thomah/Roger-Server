@@ -67,7 +67,7 @@ public class MainController {
     @Scheduled(fixedRate = 1000)
     public void randomSpeak() {
         int random = generateRandomBetween(probaMin, probaMax);
-        System.out.println("Play random sound ? " + probaMin + " / " + probaMax);
+        System.out.println("Play random sound ? " + probaMin + " <= " + random + " <= " + probaMax);
         if (random == probaMax) {
             probaMin = 0;
             int numSound = generateRandomBetween(0, nbFiles);
