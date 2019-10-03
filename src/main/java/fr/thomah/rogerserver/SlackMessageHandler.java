@@ -6,15 +6,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.thomah.rogerserver.controllers.CommandController;
-import fr.thomah.rogerserver.entities.Command;
-import fr.thomah.rogerserver.entities.FileData;
-import fr.thomah.rogerserver.entities.LocalSoundCommand;
-import fr.thomah.rogerserver.entities.TtsCommand;
+import fr.thomah.rogerserver.entities.*;
 import fr.thomah.rogerserver.repositories.FileDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -36,10 +34,10 @@ public class SlackMessageHandler implements RTMMessageHandler {
     public void handle(String message) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(message).getAsJsonObject();
-        Command objectToSend = null;
+        List<Command> objectsToSend = new ArrayList<>();
 
         // If Grafana is alerting
-        if(slackGrafanaBotId != null) {
+        if (slackGrafanaBotId != null) {
             JsonElement botId = jsonObject.get("bot_id");
             if (botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
                 JsonElement attachmentsElement = jsonObject.get("attachments");
@@ -48,14 +46,15 @@ public class SlackMessageHandler implements RTMMessageHandler {
                     JsonElement titleElement = attachmentsArray.get(0).getAsJsonObject().get("title");
                     if (titleElement != null && !titleElement.getAsString().equals("")) {
                         String title = titleElement.getAsString();
-                        if(title.startsWith("[Alerting]")) {
+                        if (title.startsWith("[Alerting]")) {
                             title = title.replace("[Alerting] ", "");
                             title = "Vous avez des nouveaux " + title + ". Au boulot !";
-                        } else if(title.startsWith("[No Data]")) {
+                        } else if (title.startsWith("[No Data]")) {
                             title = title.replace("[No Data] ", "");
-                            title = "Bien joué. Plus de " + title + " a lhorizon";
+                            title = "Bien jouer. Plus de " + title + " a lhorizon";
                         }
-                        objectToSend = new TtsCommand(title);
+                        objectsToSend.add(new EarsCommand("10", "10", "1"));
+                        objectsToSend.add(new TtsCommand(title));
                     }
                 }
             }
@@ -66,20 +65,22 @@ public class SlackMessageHandler implements RTMMessageHandler {
         if (textElement != null && !textElement.getAsString().equals("")) {
             String text = textElement.getAsString();
             if (text.startsWith("dire:")) {
-                objectToSend = new TtsCommand(text.replace("dire:", ""));
+                objectsToSend.add(new EarsCommand("10", "10", "1"));
+                objectsToSend.add(new TtsCommand(text.replace("dire:", "")));
             } else {
                 FileData matchingFileData = fileDataList.stream()
                         .filter(fileData -> text.contains(fileData.matches))
                         .findAny().orElse(null);
                 if (matchingFileData != null) {
-                    objectToSend = new LocalSoundCommand(matchingFileData.fileName);
+                    objectsToSend.add(new EarsCommand("10", "10", "1"));
+                    objectsToSend.add(new LocalSoundCommand(matchingFileData.fileName));
                 }
             }
         }
 
-        if (objectToSend != null) {
-            commandController.broadcast(objectToSend);
-        }
+        objectsToSend.forEach(objectToSend ->
+                commandController.broadcast(objectToSend)
+        );
     }
 
     public void setFileDataList(List<FileData> fileDataList) {
