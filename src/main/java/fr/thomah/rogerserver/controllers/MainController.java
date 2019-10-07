@@ -40,7 +40,7 @@ public class MainController {
     private int nbFiles = 0;
     private List<FileData> fileDataList;
     private int probaMin = 0;
-    private final static int probaMax = 3600;
+    private final static int probaMax = 1800;
 
     @PostConstruct
     public void init() {
