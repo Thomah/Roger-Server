@@ -37,7 +37,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
         List<Command> objectsToSend = new ArrayList<>();
 
         // If Grafana is alerting
-        if (slackGrafanaBotId != null) {
+        /* if (slackGrafanaBotId != null) {
             JsonElement botId = jsonObject.get("bot_id");
             if (botId != null && slackGrafanaBotId.equals(botId.getAsString())) {
                 JsonElement attachmentsElement = jsonObject.get("attachments");
@@ -58,7 +58,7 @@ public class SlackMessageHandler implements RTMMessageHandler {
                     }
                 }
             }
-        }
+        } */
 
         // If there is a text message
         JsonElement textElement = jsonObject.get("text");
